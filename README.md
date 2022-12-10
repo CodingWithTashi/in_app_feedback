@@ -1,4 +1,4 @@
-# flutter_text_viewer
+# flutter_app_feedback
 flutter_app_feedback is a simple feedback package that let user to provide feedback and raise issue in application
 ## Demo
 
@@ -6,18 +6,38 @@ flutter_app_feedback is a simple feedback package that let user to provide feedb
 
 * Create issue in GitHub
 * Send feedback via mail
-* Add record in firebase [Development]
+* Add record in firebase [WIP]
 
 ## Getting started   
 ```dart
-flutter_text_viewer: ^0.0.1
+flutter_app_feedback: ^0.0.1
 
 ```
 
 ## Usage
 
 ```dart
-const like = 'sample';
+FlutterFeedback.showFeedback(
+                context: context,
+                emailConfig: EmailConfig(
+                  toMail: 'developer.kharag@gmail.com',
+                  sendGridToken: 'send_grid_key',
+                ),
+                gitHubConfig: GitHubConfig(
+                  accessToken: 'access_token',
+                  githubUserName: 'github_user_name',
+                  repositoryName: 'github_repo_name',
+                ),
+                feedbackCallback: (FeedbackData data) {
+                  if (data.error == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Feedback Sent")));
+                  } else {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(data.error!)));
+                  }
+                },
+              );
 ```
 
 ## Additional information
