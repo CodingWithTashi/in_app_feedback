@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_app_feedback/model/feedback_data.dart';
 import 'package:http/http.dart';
+import 'package:in_app_feedback/model/feedback_data.dart';
 
 import '../constant.dart';
 import '../model/email_config.dart';

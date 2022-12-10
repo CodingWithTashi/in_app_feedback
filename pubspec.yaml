@@ -1,8 +1,8 @@
-name: flutter_app_feedback
+name: in_app_feedback
 description: Simple flutter feedback package that let users to provide feedback and create issue
 version: 0.0.1-dev.1
-homepage: https://github.com/CodingWithTashi/flutter_app_feedback
-issue_tracker: https://github.com/CodingWithTashi/flutter_app_feedback/issues
+homepage: https://github.com/CodingWithTashi/in_app_feedback
+issue_tracker: https://github.com/CodingWithTashi/in_app_feedback/issues
 
 environment:
   sdk: '>=2.18.2 <3.0.0'

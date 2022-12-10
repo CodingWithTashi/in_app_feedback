@@ -1,16 +1,16 @@
-library flutter_app_feedback;
+library in_app_feedback;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_feedback/model/email_config.dart';
-import 'package:flutter_app_feedback/model/feedback_data.dart';
-import 'package:flutter_app_feedback/widget/feedback_bottom_sheet.dart';
+import 'package:in_app_feedback/model/email_config.dart';
+import 'package:in_app_feedback/model/feedback_data.dart';
+import 'package:in_app_feedback/widget/feedback_bottom_sheet.dart';
 
 import 'model/github_config.dart';
 
-export 'package:flutter_app_feedback/flutter_feedback.dart';
-export 'package:flutter_app_feedback/model/email_config.dart';
-export 'package:flutter_app_feedback/model/feedback_data.dart';
-export 'package:flutter_app_feedback/model/github_config.dart';
+export 'package:in_app_feedback/flutter_feedback.dart';
+export 'package:in_app_feedback/model/email_config.dart';
+export 'package:in_app_feedback/model/feedback_data.dart';
+export 'package:in_app_feedback/model/github_config.dart';
 
 class FlutterFeedback {
   /// method accept email and github configuration

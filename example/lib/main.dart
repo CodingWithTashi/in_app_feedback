@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_feedback/flutter_feedback.dart';
+import 'package:in_app_feedback/flutter_feedback.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                 gitHubConfig: GitHubConfig(
                   accessToken: 'kGithubToken',
                   gitHubUserName: 'codingWithTashi',
-                  repositoryName: 'flutter_app_feedback',
+                  repositoryName: 'in_app_feedback',
                 ),
                 feedbackCallback: (FeedbackData data) {
                   if (data.error == null) {

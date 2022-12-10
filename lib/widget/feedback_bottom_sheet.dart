@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_feedback/model/email_config.dart';
-import 'package:flutter_app_feedback/model/github_config.dart';
+import 'package:in_app_feedback/model/email_config.dart';
+import 'package:in_app_feedback/model/github_config.dart';
 
 import '../helper/github_helper.dart';
 import '../helper/send_grid_helper.dart';
