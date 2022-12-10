@@ -1,6 +1,7 @@
 class GitHubConfig {
   /// GitHub access token generated token from GitHub account
   /// follow this link to see how to generate one
+  ///https://github.com/settings/tokens?type=beta
   final String accessToken;
 
   /// GitHub Username for the repository

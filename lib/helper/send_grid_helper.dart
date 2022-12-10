@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_app_feedback/feedback_date.dart';
+import 'package:flutter/src/widgets/editable_text.dart';
+import 'package:flutter_app_feedback/feedback_data.dart';
 import 'package:http/http.dart';
 
 import '../constant.dart';
@@ -9,31 +10,48 @@ import '../model/email_config.dart';
 
 class SendGridHelper {
   static Future<FeedbackData> sendMail(
-      {required EmailConfig emailConfig}) async {
-    Map<String, String> headers = {};
-    headers["Authorization"] = "Bearer ${emailConfig.sendGridToken}";
-    headers["Content-Type"] = "application/json";
+      {required EmailConfig emailConfig,
+      required String title,
+      required TextEditingController description}) async {
+    assert(emailConfig.toMailList.isNotEmpty);
+
+    var bodyData = {
+      "personalizations": [
+        {
+          "to": [
+            emailConfig.toMailList.map((email) => {"email": email})
+          ]
+        }
+      ],
+      "from": {"email": emailConfig.fromMail},
+      "subject": emailConfig.emailSubject,
+      "content": [
+        {
+          "type": "text/plain",
+          "value":
+              "Hi there,We received feedback from a user.\n Title: $title\n Description: $description\n We will update you same\n\n Regards"
+        }
+      ]
+    };
+
+    return _sendSendGridMail(bodyData: bodyData, emailConfig: emailConfig);
+  }
+
+  static Future<FeedbackData> _sendSendGridMail(
+      {required Map<String, Object> bodyData,
+      required EmailConfig emailConfig}) async {
     try {
-      var bodyData = {
-        "personalizations": [
-          {
-            "to": [
-              {"email": emailConfig.toMail}
-            ]
-          }
-        ],
-        "from": {"email": "didiri8050@eilnews.com"},
-        "subject": "Test Message",
-        "content": [
-          {"type": "text/plain", "value": "test"}
-        ]
-        // "content": [
-        //   {"type": "text/plain", "value": "New user register: "}
-        // ]
-      };
-      var response = await post(Uri.parse(kSendGridUrl),
-          headers: headers, body: json.decode(json.encode(bodyData)));
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      Map<String, String> headers = {};
+      headers["Authorization"] = "Bearer ${emailConfig.sendGridToken}";
+      headers["Content-Type"] = "application/json";
+      var response = await post(
+        Uri.parse(kSendGridUrl),
+        headers: headers,
+        body: json.encode(bodyData),
+      );
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 202) {
         return FeedbackData(
           status: response.statusCode,
           message: "Feedback successfully sent",
@@ -53,9 +71,10 @@ class SendGridHelper {
       }
     } catch (e) {
       return FeedbackData(
-          status: 500,
-          error: e.toString(),
-          message: "Something went wrong, please try again later");
+        status: 500,
+        error: e.toString(),
+        message: "Something went wrong, please try again later",
+      );
     }
   }
 }

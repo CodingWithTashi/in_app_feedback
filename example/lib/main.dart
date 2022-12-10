@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_feedback/flutter_feedback.dart';
 
+import '.env.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -33,14 +35,15 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               FlutterFeedback.showFeedback(
                 context: context,
-                emailConfig: EmailConfig(
-                  toMail: 'developer.kharag@gmail.com',
-                  sendGridToken: 'send_grid_key',
-                ),
+                // emailConfig: EmailConfig(
+                //   toMailList: ['khakontas33@gmail.com'],
+                //   fromMail: 'developer.kharag@gmail.com',
+                //   sendGridToken: kSendGridKey,
+                // ),
                 gitHubConfig: GitHubConfig(
-                  accessToken: 'access_token',
-                  githubUserName: 'github_user_name',
-                  repositoryName: 'github_repo_name',
+                  accessToken: kGithubToken,
+                  githubUserName: 'codingwithtashi',
+                  repositoryName: 'tibetan_proverb',
                 ),
                 feedbackCallback: (FeedbackData data) {
                   if (data.error == null) {
