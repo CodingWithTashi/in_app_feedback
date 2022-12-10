@@ -1,26 +1,28 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/src/widgets/editable_text.dart';
-import 'package:flutter_app_feedback/feedback_data.dart';
+import 'package:flutter_app_feedback/model/feedback_data.dart';
 import 'package:http/http.dart';
 
 import '../constant.dart';
 import '../model/email_config.dart';
 
+/// SendGrid Email Helper class to sent email via SendGrid
+/// read more on https://sendgrid.com/free/
+
 class SendGridHelper {
   static Future<FeedbackData> sendMail(
       {required EmailConfig emailConfig,
       required String title,
-      required TextEditingController description}) async {
+      required String description}) async {
     assert(emailConfig.toMailList.isNotEmpty);
 
+    /// Send grid email standard content format
+    /// Check more from https://app.sendgrid.com/guide/integrate WEB API
     var bodyData = {
       "personalizations": [
         {
-          "to": [
-            emailConfig.toMailList.map((email) => {"email": email})
-          ]
+          "to": emailConfig.toMailList.map((email) => {"email": email}).toList()
         }
       ],
       "from": {"email": emailConfig.fromMail},
@@ -34,24 +36,26 @@ class SendGridHelper {
       ]
     };
 
-    return _sendSendGridMail(bodyData: bodyData, emailConfig: emailConfig);
+    return await _sendSendGridMail(
+        bodyData: bodyData, emailConfig: emailConfig);
   }
 
   static Future<FeedbackData> _sendSendGridMail(
       {required Map<String, Object> bodyData,
       required EmailConfig emailConfig}) async {
     try {
-      Map<String, String> headers = {};
-      headers["Authorization"] = "Bearer ${emailConfig.sendGridToken}";
-      headers["Content-Type"] = "application/json";
+      Map<String, String> headers = {
+        "Authorization": "Bearer ${emailConfig.sendGridToken}",
+        "Content-Type": "application/json"
+      };
       var response = await post(
         Uri.parse(kSendGridUrl),
         headers: headers,
         body: json.encode(bodyData),
       );
-      if (response.statusCode == 200 ||
-          response.statusCode == 201 ||
-          response.statusCode == 202) {
+
+      /// return 202 status usually
+      if ([200, 202, 202].contains(response.statusCode)) {
         return FeedbackData(
           status: response.statusCode,
           message: "Feedback successfully sent",

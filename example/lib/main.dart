@@ -35,15 +35,15 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               FlutterFeedback.showFeedback(
                 context: context,
-                // emailConfig: EmailConfig(
-                //   toMailList: ['khakontas33@gmail.com'],
-                //   fromMail: 'developer.kharag@gmail.com',
-                //   sendGridToken: kSendGridKey,
-                // ),
+                emailConfig: EmailConfig(
+                  toMailList: ['test1@gmail.com', 'test2@gmail.com'],
+                  fromMail: 'yourSendGridEmail@gmail.com',
+                  sendGridToken: kSendGridKey,
+                ),
                 gitHubConfig: GitHubConfig(
                   accessToken: kGithubToken,
-                  githubUserName: 'codingwithtashi',
-                  repositoryName: 'tibetan_proverb',
+                  gitHubUserName: 'codingWithTashi',
+                  repositoryName: 'flutter_app_feedback',
                 ),
                 feedbackCallback: (FeedbackData data) {
                   if (data.error == null) {

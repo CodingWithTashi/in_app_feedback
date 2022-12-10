@@ -1,33 +1,37 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:flutter_app_feedback/model/github_config.dart';
 import 'package:http/http.dart';
 
 import '../constant.dart';
-import '../feedback_data.dart';
+import '../model/feedback_data.dart';
 
+/// GitHub Issue Helper class to create issue in GitHub
+/// read more on https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
 class GitHubHelper {
   static Future<FeedbackData> createIssue(
       {required GitHubConfig gitHubConfig,
       required String title,
-      required TextEditingController description}) async {
-    Map<String, String> headers = {};
-    headers["Authorization"] = "Bearer ${gitHubConfig.accessToken}";
-    headers["Content-Type"] = "application/vnd.github+json";
+      required String description}) async {
+    Map<String, String> headers = {
+      "Authorization": "Bearer ${gitHubConfig.accessToken}",
+      "Content-Type": "application/vnd.github+json",
+    };
 
     var url =
-        '$kGitHubUrl/${gitHubConfig.githubUserName}/${gitHubConfig.repositoryName}/issues';
+        '$kGitHubUrl/${gitHubConfig.gitHubUserName}/${gitHubConfig.repositoryName}/issues';
     try {
-      var response = await post(Uri.parse(url), headers: headers, body: {
+      var bodyData = {
         "title": title,
         "body": description,
         "labels": ["bug"]
-      });
-      if (response.statusCode == 200 ||
-          response.statusCode == 201 ||
-          response.statusCode == 202) {
+      };
+
+      /// return 201 usually
+      var response = await post(Uri.parse(url),
+          headers: headers, body: json.encode(bodyData));
+      if ([200, 202, 202].contains(response.statusCode)) {
         return FeedbackData(
           status: response.statusCode,
           message: "Feedback successfully sent",

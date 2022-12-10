@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_feedback/model/email_config.dart';
 import 'package:flutter_app_feedback/model/github_config.dart';
 
-import '../feedback_data.dart';
 import '../helper/github_helper.dart';
 import '../helper/send_grid_helper.dart';
+import '../model/feedback_data.dart';
 
 typedef OnFeedbackCallback = void Function(FeedbackData);
 
@@ -17,6 +17,8 @@ class FeedbackBottomSheet extends StatefulWidget {
 
   /// GitHub issue configuration
   final GitHubConfig? gitHubConfig;
+
+  /// Bottom Sheet Content Widget
   const FeedbackBottomSheet({
     Key? key,
     required this.feedbackCallback,
@@ -29,7 +31,10 @@ class FeedbackBottomSheet extends StatefulWidget {
 }
 
 class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
+  /// title controller for feedback
   late TextEditingController titleController;
+
+  /// description controller for feedback
   late TextEditingController descriptionController;
   @override
   void initState() {
@@ -126,34 +131,39 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
   }
 
   Future<void> _sendFeedback() async {
-    if (widget.emailConfig != null && widget.gitHubConfig != null) {
-      FeedbackData mailData = await SendGridHelper.sendMail(
-        emailConfig: widget.emailConfig!,
-        title: titleController.text,
-        description: descriptionController,
-      );
-
-      /* FeedbackData githubIssue = await GitHubHelper.createIssue(
-        gitHubConfig: widget.gitHubConfig!,
-         title:titleController.text,
-        description: descriptionController,
-      );*/
-      widget.feedbackCallback(mailData);
-    } else {
-      if (widget.emailConfig != null) {
-        SendGridHelper.sendMail(
+    if (isValidData()) {
+      if (widget.emailConfig != null && widget.gitHubConfig != null) {
+        FeedbackData mailData = await SendGridHelper.sendMail(
           emailConfig: widget.emailConfig!,
           title: titleController.text,
-          description: descriptionController,
-        ).then((result) => widget.feedbackCallback(result));
-      }
-      if (widget.gitHubConfig != null) {
-        GitHubHelper.createIssue(
+          description: descriptionController.text,
+        );
+
+        await GitHubHelper.createIssue(
           gitHubConfig: widget.gitHubConfig!,
           title: titleController.text,
-          description: descriptionController,
-        ).then((result) => widget.feedbackCallback(result));
+          description: descriptionController.text,
+        );
+        widget.feedbackCallback(mailData);
+      } else {
+        if (widget.emailConfig != null) {
+          SendGridHelper.sendMail(
+            emailConfig: widget.emailConfig!,
+            title: titleController.text,
+            description: descriptionController.text,
+          ).then((result) => widget.feedbackCallback(result));
+        }
+        if (widget.gitHubConfig != null) {
+          GitHubHelper.createIssue(
+            gitHubConfig: widget.gitHubConfig!,
+            title: titleController.text,
+            description: descriptionController.text,
+          ).then((result) => widget.feedbackCallback(result));
+        }
       }
     }
   }
+
+  bool isValidData() =>
+      titleController.text.isNotEmpty && descriptionController.text.isNotEmpty;
 }
