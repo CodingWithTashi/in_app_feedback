@@ -1,14 +1,27 @@
 # flutter_app_feedback
-flutter_app_feedback is a simple feedback package that let user to provide feedback and raise issue in application
-## Demo
+flutter_app_feedback is a simple feedback package that let user to provide feedback and raise issue from your application
 
 ## Features
+Get your user feedback without user leaving the application.
+* Create an issue in GitHub
+* Get feedback via mail through SendGrid
+* Add record in firebase [Future]
 
-* Create issue in GitHub
-* Send feedback via mail
-* Add record in firebase [WIP]
+## Prerequisite   
+### Generate API Key
+* GitHub secret token generate fom [here](https://github.com/settings/tokens?type=beta)   
+  - Go to `Geenerate new Token`
+  - Set `token name`, `expiration`
+  - Select `Repository access` and `Permissions` eg. `read write issue`   
+  
+* SendGrid Key generate from SendGrid Email API from [here](https://app.sendgrid.com/guide/integrate)
+  - Create` and verify SendGrid account
+  - open [https://app.sendgrid.com/guide/integrate/langs/curl](https://app.sendgrid.com/guide/integrate/langs/curl)   
+  - `Provide API Name` and click `Create Key`
+
 
 ## Getting started   
+
 ```dart
 flutter_app_feedback: ^0.0.1
 
