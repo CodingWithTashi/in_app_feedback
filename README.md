@@ -23,7 +23,7 @@ Get your user feedback without user leaving the application.
 ## Getting started   
 
 ```dart
-flutter_app_feedback: ^0.0.1
+flutter_app_feedback: ^0.0.1-dev.1
 
 ```
 
