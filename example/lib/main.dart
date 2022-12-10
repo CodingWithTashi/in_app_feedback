@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_feedback/flutter_feedback.dart';
 
-import '.env.dart';
-
 void main() {
   runApp(const MyApp());
 }
@@ -38,10 +36,10 @@ class HomePage extends StatelessWidget {
                 emailConfig: EmailConfig(
                   toMailList: ['test1@gmail.com', 'test2@gmail.com'],
                   fromMail: 'yourSendGridEmail@gmail.com',
-                  sendGridToken: kSendGridKey,
+                  sendGridToken: 'kSendGridKey',
                 ),
                 gitHubConfig: GitHubConfig(
-                  accessToken: kGithubToken,
+                  accessToken: 'kGithubToken',
                   gitHubUserName: 'codingWithTashi',
                   repositoryName: 'flutter_app_feedback',
                 ),
