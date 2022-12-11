@@ -1,3 +1,5 @@
+/// FeedbackContent class contains email, title and description
+/// user will enter these detail from bottom sheet
 class FeedbackContent {
   /// store user email, email is optional
   final String _userEmail;

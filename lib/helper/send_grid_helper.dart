@@ -22,7 +22,7 @@ class SendGridHelper {
     /// Check more from https://app.sendgrid.com/guide/integrate WEB API
     String userEmail = feedbackContent.userEmail.isNotEmpty == true
         ? feedbackContent.userEmail
-        : 'user';
+        : 'anonymous user';
     var bodyData = {
       "personalizations": [
         {
@@ -35,7 +35,7 @@ class SendGridHelper {
         {
           "type": "text/plain",
           "value":
-              "Hi there,\n\nWe received a feedback from  $userEmail.\n\nTitle: ${feedbackContent.title}\nDescription: ${feedbackContent.description} \n\n Regards"
+              "Hi there,\n\nWe have received feedback from $userEmail.\n\nTitle: ${feedbackContent.title}\nDescription: ${feedbackContent.description} \n\nRegards"
         }
       ]
     };
@@ -59,7 +59,7 @@ class SendGridHelper {
       );
 
       /// return 202 status usually
-      if ([200, 202, 202].contains(response.statusCode)) {
+      if ([200, 201, 202].contains(response.statusCode)) {
         return FeedbackData(
           status: response.statusCode,
           message: "Feedback successfully sent",
@@ -74,7 +74,10 @@ class SendGridHelper {
           );
         } else {
           return FeedbackData(
-              status: response.statusCode, message: response.body);
+            status: response.statusCode,
+            message: response.body,
+            error: response.body,
+          );
         }
       }
     } catch (e) {

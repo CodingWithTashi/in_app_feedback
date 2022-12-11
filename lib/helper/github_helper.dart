@@ -34,7 +34,7 @@ class GitHubHelper {
       /// return 201 usually
       var response = await post(Uri.parse(url),
           headers: headers, body: json.encode(bodyData));
-      if ([200, 202, 202].contains(response.statusCode)) {
+      if ([200, 201, 202].contains(response.statusCode)) {
         return FeedbackData(
           status: response.statusCode,
           message: "Feedback successfully sent",
@@ -49,7 +49,9 @@ class GitHubHelper {
           );
         } else {
           return FeedbackData(
-              status: response.statusCode, message: response.body);
+              status: response.statusCode,
+              message: response.body,
+              error: response.body);
         }
       }
     } catch (e) {

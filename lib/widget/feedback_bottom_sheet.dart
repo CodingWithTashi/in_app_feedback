@@ -50,6 +50,12 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
 
   /// selected issue option
   late FeedbackIssueOption selectedIssueOption;
+
+  /// Global form key
+  final formKey = GlobalKey<FormState>();
+
+  /// check if submitting
+  bool isSubmitting = false;
   @override
   void initState() {
     titleController = TextEditingController();
@@ -70,6 +76,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
   Widget build(BuildContext context) {
     const sizedBoxHeight = 15.0;
     return Form(
+      key: formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -102,12 +109,15 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
     );
   }
 
+  /// bottom sheet label widget
   Widget _feedbackLabel() => Center(
         child: Text(
           "Feedback & Issue",
           style: Theme.of(context).textTheme.titleLarge,
         ),
       );
+
+  /// bottom sheet sub label widget
   Widget _feedbackSubLabel() => Center(
         child: Text(
           "We would love to hear your feedback/issue",
@@ -115,6 +125,8 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
           style: Theme.of(context).textTheme.bodyMedium,
         ),
       );
+
+  /// bottom sheet title widget
   Widget _feedbackTitleField() => TextFormField(
         controller: titleController,
         decoration: const InputDecoration(
@@ -125,12 +137,14 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
           ),
         ),
         validator: (value) {
-          if (value == null || (!(value.length > 5) && value.isNotEmpty)) {
+          if (value == null || !((value.length > 5) && value.isNotEmpty)) {
             return "At least 5 characters is required!";
           }
           return null;
         },
       );
+
+  /// bottom sheet description widget
 
   Widget _feedbackDescriptionField() => TextFormField(
         controller: descriptionController,
@@ -144,7 +158,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
           ),
         ),
         validator: (value) {
-          if (value == null || (!(value.length > 10) && value.isNotEmpty)) {
+          if (value == null || !((value.length > 10) && value.isNotEmpty)) {
             return "At least 10 characters is required!";
           }
           return null;
@@ -154,6 +168,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
         maxLines: 3,
       );
 
+  /// bottom sheet user email TextField widget
   Widget _emailTextField() => TextFormField(
         controller: emailController,
         decoration: const InputDecoration(
@@ -171,7 +186,13 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
         },
       );
 
+  /// bottom sheet feedback Action Button widget
   Widget _feedbackActionButton() {
+    if (isSubmitting) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -197,12 +218,15 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
   }
 
   Future<void> _sendFeedback() async {
-    FeedbackContent feedbackContent = FeedbackContent(
-        userEmail: emailController.text,
-        title: titleController.text,
-        description: descriptionController.text);
-    if (isValidData(feedbackContent)) {
+    final isValidForm = formKey.currentState?.validate();
+
+    if (isValidForm != null && isValidForm == true) {
+      FeedbackContent feedbackContent = FeedbackContent(
+          userEmail: emailController.text,
+          title: titleController.text,
+          description: descriptionController.text);
       if (selectedIssueOption.value == kBoth) {
+        _updateState(submitting: true);
         FeedbackData mailData = await SendGridHelper.sendMail(
           emailConfig: widget.emailConfig!,
           feedbackContent: feedbackContent,
@@ -212,29 +236,37 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
           gitHubConfig: widget.gitHubConfig!,
           feedbackContent: feedbackContent,
         );
+        _updateState(submitting: false);
         widget.feedbackCallback(mailData);
       } else {
         if (selectedIssueOption.value == kEmail) {
+          _updateState(submitting: true);
           SendGridHelper.sendMail(
             emailConfig: widget.emailConfig!,
             feedbackContent: feedbackContent,
-          ).then((result) => widget.feedbackCallback(result));
+          ).then((result) {
+            _updateState(submitting: false);
+            widget.feedbackCallback(result);
+          });
         }
         if (selectedIssueOption.value == kGithub) {
+          _updateState(submitting: true);
           GitHubHelper.createIssue(
             gitHubConfig: widget.gitHubConfig!,
             feedbackContent: feedbackContent,
-          ).then((result) => widget.feedbackCallback(result));
+          ).then((result) {
+            _updateState(submitting: false);
+            widget.feedbackCallback(result);
+          });
         }
       }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text('Title and description is required')));
     }
   }
 
-  bool isValidData(FeedbackContent feedbackContent) =>
-      feedbackContent.title.trim().isNotEmpty &&
-      feedbackContent.description.trim().isNotEmpty;
+  /// Update progress state
+  void _updateState({required bool submitting}) {
+    setState(() {
+      isSubmitting = submitting;
+    });
+  }
 }

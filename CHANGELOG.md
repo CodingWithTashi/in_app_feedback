@@ -8,3 +8,10 @@
 
 * Dropdown option
 * User email TextField
+* 
+## 0.0.1
+
+* GitHub Issue Integration
+* SendGrid Email integration
+* Initial stable version
+* Update documentation

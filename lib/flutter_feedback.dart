@@ -25,7 +25,8 @@ class FlutterFeedback {
     bool isDismissible = false,
   }) async {
     /// at least one config need to provide
-    assert(emailConfig != null || gitHubConfig != null);
+    assert((emailConfig != null || gitHubConfig != null),
+        'Either one or both configuration must be provided');
 
     /// Display bottom sheet with feedback content
     FeedbackData? result = await showModalBottomSheet(
@@ -51,6 +52,6 @@ class FlutterFeedback {
     );
 
     /// return feedback receive data back to the application
-    result != null ? feedbackCallback(result) : null;
+    if (result != null) feedbackCallback(result);
   }
 }

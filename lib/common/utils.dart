@@ -1,11 +1,7 @@
+/// Utility class
+/// includes method such as validate string,email etc
 class Utils {
-  static String? validateTitle({required String? text}) {
-    if (text == null || (!(text.length > 5) && text.isNotEmpty)) {
-      return "title should have at least 5 characters";
-    }
-    return null;
-  }
-
+  /// validate your email using regular expression
   static bool isValidEmail(String? value) {
     if (value != null && value.trim().isNotEmpty) {
       String pattern =

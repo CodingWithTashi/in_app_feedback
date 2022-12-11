@@ -6,10 +6,17 @@ import 'package:in_app_feedback/model/github_config.dart';
 
 typedef OnFeedbackIssueCallback = void Function(FeedbackIssueOption);
 
+/// Feedback dropdown widget
 class FeedbackDropDown extends StatelessWidget {
+  /// Email configuration
   final EmailConfig? emailConfig;
+
+  /// GitHub configuration
   final GitHubConfig? gitHubConfig;
+
+  /// Dropdown selected callback method
   final OnFeedbackIssueCallback issueCallback;
+
   const FeedbackDropDown(
       {Key? key,
       this.emailConfig,
@@ -56,6 +63,7 @@ class FeedbackDropDown extends StatelessWidget {
     );
   }
 
+  /// get default selected option
   FeedbackIssueOption _getSelectedOption(
       {required List<FeedbackIssueOption> dropdownList}) {
     if (gitHubConfig != null && emailConfig != null) {
