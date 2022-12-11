@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:in_app_feedback/model/feedback_content.dart';
 import 'package:in_app_feedback/model/feedback_data.dart';
 
 import '../constant.dart';
@@ -11,14 +12,17 @@ import '../model/email_config.dart';
 /// read more on https://sendgrid.com/free/
 
 class SendGridHelper {
-  static Future<FeedbackData> sendMail(
-      {required EmailConfig emailConfig,
-      required String title,
-      required String description}) async {
+  static Future<FeedbackData> sendMail({
+    required EmailConfig emailConfig,
+    required FeedbackContent feedbackContent,
+  }) async {
     assert(emailConfig.toMailList.isNotEmpty);
 
     /// Send grid email standard content format
     /// Check more from https://app.sendgrid.com/guide/integrate WEB API
+    String userEmail = feedbackContent.userEmail.isNotEmpty == true
+        ? feedbackContent.userEmail
+        : 'user';
     var bodyData = {
       "personalizations": [
         {
@@ -31,7 +35,7 @@ class SendGridHelper {
         {
           "type": "text/plain",
           "value":
-              "Hi there,We received feedback from a user.\n Title: $title\n Description: $description\n We will update you same\n\n Regards"
+              "Hi there,\n\nWe received a feedback from  $userEmail.\n\nTitle: ${feedbackContent.title}\nDescription: ${feedbackContent.description} \n\n Regards"
         }
       ]
     };

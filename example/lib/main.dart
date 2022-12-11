@@ -31,17 +31,19 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
             onPressed: () {
-              FlutterFeedback.showFeedback(
+              FlutterFeedback.showFeedbackBottomSheet(
                 context: context,
                 emailConfig: EmailConfig(
-                  toMailList: ['test1@gmail.com', 'test2@gmail.com'],
-                  fromMail: 'yourSendGridEmail@gmail.com',
+                  toMailList: [
+                    'test@gmail.com',
+                  ],
+                  fromMail: 'developer.test@gmail.com',
                   sendGridToken: 'kSendGridKey',
                 ),
                 gitHubConfig: GitHubConfig(
                   accessToken: 'kGithubToken',
                   gitHubUserName: 'codingWithTashi',
-                  repositoryName: 'in_app_feedback',
+                  repositoryName: 'tibetan_proverb',
                 ),
                 feedbackCallback: (FeedbackData data) {
                   if (data.error == null) {
@@ -52,6 +54,12 @@ class HomePage extends StatelessWidget {
                         .showSnackBar(SnackBar(content: Text(data.error!)));
                   }
                 },
+                bottomSheetShape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0),
+                  ),
+                ),
               );
             },
             child: const Text('Send Feedback')),

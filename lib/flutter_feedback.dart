@@ -15,19 +15,25 @@ export 'package:in_app_feedback/model/github_config.dart';
 class FlutterFeedback {
   /// method accept email and github configuration
   /// check for EmailConfig class and GitHubConfig class for implementation
-  static Future<void> showFeedback({
+  static Future<void> showFeedbackBottomSheet({
     required BuildContext context,
     EmailConfig? emailConfig,
     GitHubConfig? gitHubConfig,
     required Function(FeedbackData) feedbackCallback,
+    ShapeBorder? bottomSheetShape,
+    Color? backgroundColor,
+    bool isDismissible = false,
   }) async {
     /// at least one config need to provide
     assert(emailConfig != null || gitHubConfig != null);
 
     /// Display bottom sheet with feedback content
-    FeedbackData result = await showModalBottomSheet(
+    FeedbackData? result = await showModalBottomSheet(
+      shape: bottomSheetShape,
+      backgroundColor: backgroundColor,
       context: context,
       isScrollControlled: true,
+      isDismissible: isDismissible,
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
@@ -45,6 +51,6 @@ class FlutterFeedback {
     );
 
     /// return feedback receive data back to the application
-    feedbackCallback(result);
+    result != null ? feedbackCallback(result) : null;
   }
 }
