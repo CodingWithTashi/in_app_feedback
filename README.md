@@ -33,16 +33,19 @@ in_app_feedback: ^0.0.1
 ## Usage
 
 ```dart
-FlutterFeedback.showFeedback(
+FlutterFeedback.showFeedbackBottomSheet(
                 context: context,
                 emailConfig: EmailConfig(
-                  toMail: 'developer.kharag@gmail.com',
-                  sendGridToken: 'send_grid_key',
+                  toMailList: [
+                    'test@gmail.com',
+                  ],
+                  fromMail: 'developer.test@gmail.com',
+                  sendGridToken: 'kSendGridKey',
                 ),
                 gitHubConfig: GitHubConfig(
-                  accessToken: 'access_token',
-                  githubUserName: 'github_user_name',
-                  repositoryName: 'github_repo_name',
+                  accessToken: 'kGithubToken',
+                  gitHubUserName: 'codingWithTashi',
+                  repositoryName: 'tibetan_proverb',
                 ),
                 feedbackCallback: (FeedbackData data) {
                   if (data.error == null) {
@@ -53,6 +56,12 @@ FlutterFeedback.showFeedback(
                         .showSnackBar(SnackBar(content: Text(data.error!)));
                   }
                 },
+                bottomSheetShape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0),
+                  ),
+                ),
               );
 ```
 
