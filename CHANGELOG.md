@@ -15,3 +15,6 @@
 * SendGrid Email integration
 * Initial stable version
 * Update documentation
+
+## 0.0.1+2
+* Update README.md
