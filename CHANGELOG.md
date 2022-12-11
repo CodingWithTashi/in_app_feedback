@@ -3,3 +3,8 @@
 * Initial dev release
 * GitHub Issue Integration
 * SendGrid Email integration
+
+## 0.0.1-dev.2
+
+* Dropdown option
+* User email TextField
