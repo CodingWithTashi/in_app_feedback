@@ -5,7 +5,10 @@ in_app_feedback is a simple feedback package that let user to provide feedback a
 Get your user feedback without user leaving the application.
 * Create an issue in GitHub
 * Get feedback via mail through SendGrid
-* Add record in firebase [Future]
+* Add record in firebase [Future]   
+
+## Demo
+<img src="https://user-images.githubusercontent.com/25583737/206891217-9bec1f43-aa9b-46be-9ce0-ab4e9aba6aec.jpeg" width=250/>
 
 ## Prerequisite   
 ### Generate API Key
