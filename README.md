@@ -26,7 +26,7 @@ Get your user feedback without user leaving the application.
 ## Getting started   
 
 ```dart
-in_app_feedback: ^0.0.1+2
+in_app_feedback: ^0.0.1+3
 
 ```
 

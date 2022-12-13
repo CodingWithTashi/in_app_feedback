@@ -18,3 +18,8 @@
 
 ## 0.0.1+2
 * Update README.md
+
+## 0.0.1+3
+* Update dropdown state
+* Disable form while submitting
+* Version and README.md update

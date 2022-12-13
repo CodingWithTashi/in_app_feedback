@@ -7,7 +7,7 @@ import 'package:in_app_feedback/model/github_config.dart';
 typedef OnFeedbackIssueCallback = void Function(FeedbackIssueOption);
 
 /// Feedback dropdown widget
-class FeedbackDropDown extends StatelessWidget {
+class FeedbackDropDown extends StatefulWidget {
   /// Email configuration
   final EmailConfig? emailConfig;
 
@@ -17,22 +17,35 @@ class FeedbackDropDown extends StatelessWidget {
   /// Dropdown selected callback method
   final OnFeedbackIssueCallback issueCallback;
 
+  ///Enable/disable dropdown base on submit state
+  final bool enabledDropDown;
   const FeedbackDropDown(
       {Key? key,
       this.emailConfig,
       this.gitHubConfig,
-      required this.issueCallback})
+      required this.issueCallback,
+      required this.enabledDropDown})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    List<FeedbackIssueOption> dropdownList =
-        FeedbackIssueOption.dropDownList(emailConfig, gitHubConfig);
-    FeedbackIssueOption selectedOption =
-        _getSelectedOption(dropdownList: dropdownList);
+  State<FeedbackDropDown> createState() => _FeedbackDropDownState();
+}
 
+class _FeedbackDropDownState extends State<FeedbackDropDown> {
+  List<FeedbackIssueOption> dropdownList = [];
+  late FeedbackIssueOption selectedOption;
+  @override
+  void initState() {
+    dropdownList = FeedbackIssueOption.dropDownList(
+        widget.emailConfig, widget.gitHubConfig);
+    selectedOption = _getSelectedOption(dropdownList: dropdownList);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     /// set default issue call back
-    issueCallback(selectedOption);
+    widget.issueCallback(selectedOption);
     return SizedBox(
       width: MediaQuery.of(context).size.width / 3,
       child: DropdownButtonFormField<FeedbackIssueOption>(
@@ -51,14 +64,16 @@ class FeedbackDropDown extends StatelessWidget {
               ),
             )
             .toList(),
-        onChanged: (value) {
-          if (value != null) {
-            selectedOption = value;
+        onChanged: widget.enabledDropDown
+            ? (value) {
+                if (value != null) {
+                  selectedOption = value;
 
-            /// set issue callback manually
-            issueCallback(selectedOption);
-          }
-        },
+                  /// set issue callback manually
+                  widget.issueCallback(selectedOption);
+                }
+              }
+            : null,
       ),
     );
   }
@@ -66,10 +81,10 @@ class FeedbackDropDown extends StatelessWidget {
   /// get default selected option
   FeedbackIssueOption _getSelectedOption(
       {required List<FeedbackIssueOption> dropdownList}) {
-    if (gitHubConfig != null && emailConfig != null) {
+    if (widget.gitHubConfig != null && widget.emailConfig != null) {
       return dropdownList.where((element) => element.value == kBoth).first;
     } else {
-      if (gitHubConfig != null) {
+      if (widget.gitHubConfig != null) {
         return dropdownList.where((element) => element.value == kGithub).first;
       } else {
         return dropdownList.where((element) => element.value == kEmail).first;

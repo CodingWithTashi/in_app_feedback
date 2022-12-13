@@ -23,6 +23,8 @@ class FlutterFeedback {
     ShapeBorder? bottomSheetShape,
     Color? backgroundColor,
     bool isDismissible = false,
+    String? title,
+    String? subTitle,
   }) async {
     /// at least one config need to provide
     assert((emailConfig != null || gitHubConfig != null),
@@ -43,6 +45,9 @@ class FlutterFeedback {
           child: FeedbackBottomSheet(
             emailConfig: emailConfig,
             gitHubConfig: gitHubConfig,
+            title: title ?? 'Feedback & Issue',
+            subTitle:
+                subTitle ?? '"We would love to hear your feedback & issue',
             feedbackCallback: (feedback) {
               Navigator.pop(context, feedback);
             },

@@ -23,12 +23,20 @@ class FeedbackBottomSheet extends StatefulWidget {
   /// GitHub issue configuration
   final GitHubConfig? gitHubConfig;
 
+  /// title of bottom sheet
+  final String title;
+
+  /// subtitle of bottom sheet
+  final String subTitle;
+
   /// Bottom Sheet Content Widget
   const FeedbackBottomSheet({
     Key? key,
     required this.feedbackCallback,
     this.emailConfig,
     this.gitHubConfig,
+    required this.title,
+    required this.subTitle,
   }) : super(key: key);
 
   @override
@@ -89,6 +97,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
               _feedbackSubLabel(),
               const Divider(),
               FeedbackDropDown(
+                enabledDropDown: !isSubmitting,
                 emailConfig: widget.emailConfig,
                 gitHubConfig: widget.gitHubConfig,
                 issueCallback: (selectedOption) =>
@@ -112,7 +121,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
   /// bottom sheet label widget
   Widget _feedbackLabel() => Center(
         child: Text(
-          "Feedback & Issue",
+          widget.title,
           style: Theme.of(context).textTheme.titleLarge,
         ),
       );
@@ -120,7 +129,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
   /// bottom sheet sub label widget
   Widget _feedbackSubLabel() => Center(
         child: Text(
-          "We would love to hear your feedback/issue",
+          widget.subTitle,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyMedium,
         ),
@@ -128,6 +137,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
 
   /// bottom sheet title widget
   Widget _feedbackTitleField() => TextFormField(
+        enabled: !isSubmitting,
         controller: titleController,
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(contentPadding),
@@ -147,6 +157,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
   /// bottom sheet description widget
 
   Widget _feedbackDescriptionField() => TextFormField(
+        enabled: !isSubmitting,
         controller: descriptionController,
         keyboardType: TextInputType.multiline,
         decoration: const InputDecoration(
@@ -170,6 +181,7 @@ class _FeedbackBottomSheetState extends State<FeedbackBottomSheet> {
 
   /// bottom sheet user email TextField widget
   Widget _emailTextField() => TextFormField(
+        enabled: !isSubmitting,
         controller: emailController,
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(contentPadding),
