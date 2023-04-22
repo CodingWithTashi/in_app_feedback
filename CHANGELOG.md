@@ -23,3 +23,6 @@
 * Update dropdown state
 * Disable form while submitting
 * Version and README.md update
+
+## 0.0.1+4
+* Typo fixed and version update
