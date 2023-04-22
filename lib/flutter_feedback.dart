@@ -47,7 +47,7 @@ class FlutterFeedback {
             gitHubConfig: gitHubConfig,
             title: title ?? 'Feedback & Issue',
             subTitle:
-                subTitle ?? '"We would love to hear your feedback & issue',
+                subTitle ?? 'We would love to hear your feedback & issue',
             feedbackCallback: (feedback) {
               Navigator.pop(context, feedback);
             },
