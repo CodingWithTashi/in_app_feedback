@@ -26,3 +26,6 @@
 
 ## 0.0.1+4
 * Typo fixed and version update
+
+## 0.0.1+5
+* Updated http version
